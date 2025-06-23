@@ -1,0 +1,60 @@
+CREATE TABLE veiculos (
+    id SERIAL PRIMARY KEY,
+    placa VARCHAR(10) UNIQUE,
+    modelo VARCHAR(50),
+    marca VARCHAR(50),
+    ano INT,
+    tipo VARCHAR(30), -- Ex: Caminhão, Van, Moto
+    km_atual NUMERIC,
+    ativo BOOLEAN
+);
+
+CREATE TABLE motoristas (
+    id SERIAL PRIMARY KEY,
+    nome VARCHAR(100),
+    contato VARCHAR(50),
+    status VARCHAR(20) -- ativo, afastado, desligado
+);
+
+CREATE TABLE manutencoes (
+    id SERIAL PRIMARY KEY,
+    id_veiculo INT REFERENCES veiculos(id),
+    tipo VARCHAR(20), -- preventiva ou corretiva
+    data DATE,
+    custo_total NUMERIC(10,2),
+    observacao TEXT
+);
+
+CREATE TABLE pecas_usadas (
+    id SERIAL PRIMARY KEY,
+    id_manutencao INT REFERENCES manutencoes(id),
+    nome_peca VARCHAR(100),
+    preco_unitario NUMERIC(10,2),
+    quantidade INT
+);
+
+CREATE TABLE abastecimentos (
+    id SERIAL PRIMARY KEY,
+    id_veiculo INT REFERENCES veiculos(id),
+    data DATE,
+    litros NUMERIC(6,2),
+    valor_total NUMERIC(10,2),
+    km_registrado NUMERIC
+);
+
+CREATE TABLE custos_fixos (
+    id SERIAL PRIMARY KEY,
+    id_veiculo INT REFERENCES veiculos(id),
+    descricao VARCHAR(100),
+    valor NUMERIC(10,2),
+    data_lancamento DATE
+);
+
+CREATE TABLE alertas (
+    id SERIAL PRIMARY KEY,
+    id_veiculo INT REFERENCES veiculos(id),
+    tipo_alerta VARCHAR(50),
+    mensagem TEXT,
+    data_geracao DATE,
+    resolvido BOOLEAN
+);
